@@ -10,6 +10,7 @@ import logo from "../assets/imgs/logo.png"
 import "../assets/stylus/reset.styl"
 import "../assets/stylus/font.styl"
 import style from "./app.styl?module"
+// import style from './app.less?module'
 
 class App extends React.Component {
   constructor(props) {
