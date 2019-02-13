@@ -33,6 +33,7 @@ class MiniPlayer extends React.Component {
   render() {
     let song = this.props.song;
 
+
     if (!song.img) {
       song.img = require("../../assets/imgs/music.png");
     }

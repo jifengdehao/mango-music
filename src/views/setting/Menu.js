@@ -23,6 +23,7 @@ class Menu extends React.Component {
       });
     }, 300);
   }
+  // 关闭
   close = () => {
     this.props.closeMenu();
   }

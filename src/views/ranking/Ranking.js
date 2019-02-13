@@ -20,22 +20,19 @@ class Ranking extends React.Component {
   }
   componentDidMount() {
     getRankingList().then((res) => {
-      // console.log("获取排行榜：");
-      if (res) {
-        // console.log(res);
-        if (res.code === CODE_SUCCESS) {
-          let topList = [];
-          res.data.topList.forEach(item => {
-            if (/MV/i.test(item.topTitle)) {
-              return;
-            }
-            topList.push(RankingModel.createRankingByList(item));
-          });
-          this.setState({
-            loading: false,
-            rankingList: topList
-          });
-        }
+      if (res && res.code === CODE_SUCCESS) {
+        console.log(res);
+        let topList = [];
+        res.data.topList.forEach(item => {
+          if (/MV/i.test(item.topTitle)) {
+            return;
+          }
+          topList.push(RankingModel.createRankingByList(item));
+        });
+        this.setState({
+          loading: false,
+          rankingList: topList
+        });
       }
     });
   }
@@ -59,7 +56,7 @@ class Ranking extends React.Component {
                   <div className={`${style.rankingWrapper} skin-ranking-wrapper`} key={ranking.id}
                     onClick={this.toDetail(`${match.url + '/' + ranking.id}`)}>
                     <div className={style.left}>
-                      <LazyLoad height={100}>
+                      <LazyLoad height={100} placeholder={<img src={require("../../assets/imgs/music.png")} alt="music" />}>
                         <img src={ranking.img} alt={ranking.title} />
                       </LazyLoad>
                     </div>
@@ -74,7 +71,7 @@ class Ranking extends React.Component {
                               <span className={style.index}>{index + 1}</span>
                               <span>{song.name}</span>
                               &nbsp;-&nbsp;
-														<span className="singer">{song.singer}</span>
+                              <span className="singer">{song.singer}</span>
                             </div>
                           );
                         })

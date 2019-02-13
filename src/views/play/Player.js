@@ -34,7 +34,7 @@ class Player extends React.Component {
       playStatus: false,
       currentPlayMode: 0
     }
-
+    // 播放器
     this.audioRef = React.createRef();
     // 歌手图片ref
     this.singerImgRef = React.createRef();
@@ -292,13 +292,17 @@ class Player extends React.Component {
         }
       }
     }
+
     let song = this.currentSong;
+
+
 
     let playBg = song.img ? song.img : require("../../assets/imgs/play_bg.jpg");
 
     // 播放按钮样式
     let playButtonClass = this.state.playStatus === true ? "icon-pause" : "icon-play";
 
+    // 是否播放
     song.playStatus = this.state.playStatus;
 
     return (

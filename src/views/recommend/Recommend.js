@@ -7,6 +7,7 @@ import { CODE_SUCCESS } from "../../api/config"
 import Scroll from "../../components/scroll/Scroll"
 import Loading from "../../components/loading/Loading"
 import * as AlbumModel from "../../models/album"
+// import PlaceHolder from '../../components/placeholder/placeholder'
 
 import style from "./recommend.styl?module"
 import "swiper/dist/css/swiper.css"
@@ -27,53 +28,51 @@ class Recommend extends React.Component {
     if (!this.props.match.isExact) {
       this.setState({ loading: false });
     }
+    console.log(this.props.match)
+    // 获取轮播图
     getCarousel().then((res) => {
-      // console.log("获取轮播：");
-      if (res) {
-        // console.log(res);
-        if (res.code === CODE_SUCCESS) {
-          this.setState({
-            sliderList: res.data.slider
-          }, () => {
-            if (!this.sliderSwiper) {
-              // 初始化轮播图
-              this.sliderSwiper = new Swiper(".slider-container", {
-                loop: true,
-                autoplay: 3000,
-                autoplayDisableOnInteraction: false,
-                pagination: '.swiper-pagination'
-              });
-            }
-          });
-        }
+      if (res && res.code === CODE_SUCCESS) {
+        console.log(res);
+        this.setState({
+          sliderList: res.data.slider
+        }, () => {
+          if (!this.sliderSwiper) {
+            // 初始化轮播图
+            this.sliderSwiper = new Swiper(".slider-container", {
+              loop: true,
+              autoplay: 3000,
+              autoplayDisableOnInteraction: false,
+              pagination: '.swiper-pagination'
+            });
+          }
+        });
       }
     });
 
     getNewAlbum().then((res) => {
-      // console.log("获取最新专辑：");
-      if (res) {
-        // console.log(res);
-        if (res.code === CODE_SUCCESS) {
+      if (res && res.code === CODE_SUCCESS) {
+          console.log(res);
           // 根据发布时间降序排列
           let albumList = res.albumlib.data.list;
           albumList.sort((a, b) => {
-            return new Date(b.public_time).getTime() - new Date(a.public_time).getTime();
+              return new Date(b.public_time).getTime() - new Date(a.public_time).getTime();
           });
           this.setState({
-            loading: false,
-            newAlbums: albumList
+              loading: false,
+              newAlbums: albumList
           });
-        }
       }
     });
 
   }
+  // 轮播图跳转
   toLink(linkUrl) {
     /* 使用闭包把参数变为局部变量使用 */
     return () => {
       window.location.href = linkUrl;
     };
   }
+  // 跳转到详情
   toAlbumDetail(url) {
     /* scroll组件会派发一个点击事件，不能使用链接跳转 */
     return () => {
@@ -94,6 +93,7 @@ class Recommend extends React.Component {
             <LazyLoad height={60} placeholder={<img src={require("../../assets/imgs/music.png")} alt="music" />}>
               <img src={album.img} width="100%" height="100%" alt={album.name} />
             </LazyLoad>
+
           </div>
           <div className={style.right}>
             <div className="album-name">
@@ -114,7 +114,7 @@ class Recommend extends React.Component {
         <Scroll
           onScroll={(e) => {
             /* 检查懒加载组件是否出现在视图中，如果出现就加载组件 */
-            forceCheck();
+              forceCheck();
           }}>
           <div>
             <div className="slider-container">

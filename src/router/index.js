@@ -64,6 +64,7 @@ const router = [
       }
     ]
   },
+  /*404*/
   {
     component: () => (
       <div style={{marginTop: 100, textAlign: "center"}}>

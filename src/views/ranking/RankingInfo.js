@@ -28,6 +28,7 @@ class RankingInfo extends React.Component {
       ranking: {},
       songs: []
     };
+    console.log(this.props)
   }
   componentDidMount() {
     this.setState({
@@ -37,27 +38,24 @@ class RankingInfo extends React.Component {
   }
   getRankingInfo() {
     getRankingInfo(this.props.match.params.id).then((res) => {
-      // console.log("获取排行榜详情：");
-      if (res) {
-        // console.log(res);
-        if (res.code === CODE_SUCCESS) {
-          let ranking = RankingModel.createRankingByDetail(res.topinfo);
-          ranking.info = res.topinfo.info;
-          let songList = [];
-          res.songlist.forEach(item => {
-            if (item.data.pay.payplay === 1) { return }
-            let song = SongModel.createSong(item.data);
-            // 获取歌曲vkey
-            this.getSongUrl(song, item.data.songmid);
-            songList.push(song);
-          });
+      if (res && res.code === CODE_SUCCESS) {
+        console.log(res);
+        let ranking = RankingModel.createRankingByDetail(res.topinfo);
+        ranking.info = res.topinfo.info;
+        let songList = [];
+        res.songlist.forEach(item => {
+          if (item.data.pay.payplay === 1) { return }
+          let song = SongModel.createSong(item.data);
+          // 获取歌曲vkey
+          this.getSongUrl(song, item.data.songmid);
+          songList.push(song);
+        });
 
-          this.setState({
-            loading: false,
-            ranking: ranking,
-            songs: songList
-          });
-        }
+        this.setState({
+          loading: false,
+          ranking: ranking,
+          songs: songList
+        });
       }
     });
   }
