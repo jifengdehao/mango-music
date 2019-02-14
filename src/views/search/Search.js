@@ -29,14 +29,11 @@ class Search extends React.Component {
   }
   componentDidMount() {
     getHotKey().then((res) => {
-      // console.log("获取热搜：");
-      if (res) {
-        // console.log(res);
-        if (res.code === CODE_SUCCESS) {
-          this.setState({
-            hotKeys: res.data.hotkey
-          });
-        }
+      if (res && res.code === CODE_SUCCESS) {
+        console.log(res);
+        this.setState({
+          hotKeys: res.data.hotkey
+        });
       }
     });
   }
@@ -96,46 +93,43 @@ class Search extends React.Component {
   search = (w) => {
     this.setState({ w, loading: true });
     search(w).then((res) => {
-      // console.log("搜索：");
-      if (res) {
+      if (res && res.code === CODE_SUCCESS) {
         // console.log(res);
-        if (res.code === CODE_SUCCESS) {
-          let zhida = res.data.zhida;
-          let type = zhida.type;
-          let singer = {};
-          let album = {};
-          switch (type) {
+        let zhida = res.data.zhida;
+        let type = zhida.type;
+        let singer = {};
+        let album = {};
+        switch (type) {
             // 0：表示歌曲
-            case 0:
-              break;
+          case 0:
+            break;
             // 1：表示歌手
-            case 1:
-              let zhiDaSinger = zhida.zhida_singer;
-              singer = SingerModel.createSingerBySearch(zhiDaSinger);
-              singer.songNum = zhiDaSinger.songNum;
-              singer.albumNum = zhiDaSinger.albumNum;
-              break;
+          case 1:
+            let zhiDaSinger = zhida.zhida_singer;
+            singer = SingerModel.createSingerBySearch(zhiDaSinger);
+            singer.songNum = zhiDaSinger.songNum;
+            singer.albumNum = zhiDaSinger.albumNum;
+            break;
             // 2: 表示专辑
-            case 2:
-              let zhiDaAlbum = zhida.zhida_album;
-              album = AlbumModel.createAlbumBySearch(zhiDaAlbum);
-              break;
-            default:
-              break;
-          }
-
-          let songs = [];
-          res.data.song.list.forEach((data) => {
-            if (data.pay.payplay === 1) { return }
-            songs.push(SongModel.createSong(data));
-          });
-          this.setState({
-            album: album,
-            singer: singer,
-            songs: songs,
-            loading: false
-          });
+          case 2:
+            let zhiDaAlbum = zhida.zhida_album;
+            album = AlbumModel.createAlbumBySearch(zhiDaAlbum);
+            break;
+          default:
+            break;
         }
+
+        let songs = [];
+        res.data.song.list.forEach((data) => {
+          if (data.pay.payplay === 1) { return }
+          songs.push(SongModel.createSong(data));
+        });
+        this.setState({
+          album: album,
+          singer: singer,
+          songs: songs,
+          loading: false
+        });
       }
     });
   }

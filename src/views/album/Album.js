@@ -37,10 +37,8 @@ class Album extends React.Component {
     this.albumContainerRef.current.style.top = this.albumBgRef.current.offsetHeight + "px";
 
     getAlbumInfo(this.props.match.params.id).then((res) => {
-      // console.log("获取专辑详情：");
-      if (res) {
         // console.log(res);
-        if (res.code === CODE_SUCCESS) {
+        if ( res && res.code === CODE_SUCCESS) {
           let album = AlbumModel.createAlbumByDetail(res.data);
           album.desc = res.data.desc;
 
@@ -58,7 +56,6 @@ class Album extends React.Component {
             songs: songs
           });
         }
-      }
     });
     // this.initMusicIco();
   }
